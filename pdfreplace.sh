@@ -15,11 +15,14 @@ out=()
 
 lenA=$(pdfLength "$docA")
 lenB=$(pdfLength "$docB")
-echo "document length $lenA, $lenB"
 
-# TODO check valid numbers
-readarray -t ins < <(printf "%d\n" ${ins[*]} | sort -n)
-echo "sorted ${ins[*]}"
+in=$(printf "%d\n" ${ins[*]})
+if [[ $? != 0 ]]; then 
+	echo "Invalid page number format"
+	exit 1
+fi
+
+readarray -t ins < <(echo -e "$in" | sort -nu)
 n=${#ins[*]}
 
 if (( n > lenB)); then
@@ -28,15 +31,15 @@ if (( n > lenB)); then
 fi
 
 start=1
-last=0
-lastins=0
+lastA=0
+lastB=0
 
 for ((i=0; i<$n; i++ )); do	
-	if (( ${ins[$i]} != lastins + 1 )); then 
-		last=$((${ins[$i]} - 1))
-		out+=("A$start-$last")
-		lastins=${ins[$i]}
+	if (( ${ins[$i]} != lastB + 1 )); then 
+		lastA=$((${ins[$i]} - 1))
+		out+=("A$start-$lastA")
 	fi
+	lastB=${ins[$i]}
 	out+=("B$((i + 1))")
 	start=$((ins[i] + 1))
 done
