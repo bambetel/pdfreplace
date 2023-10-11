@@ -6,7 +6,7 @@ Uses pdftk for PDF operations.
 
 ## Idea
 
-![Scheme](scheme1.png)
+![Scheme](scheme1.svg)
 
 ## Usage
 
