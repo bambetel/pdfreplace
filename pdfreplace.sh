@@ -13,6 +13,16 @@ resultDoc=$3
 ins=(${@:4})
 out=()
 
+if [ ! -f "$docA" ]; then 
+	echo "Input file A - not a file: $docA"
+	exit 1
+fi
+
+if [ ! -f "$docB" ]; then 
+	echo "Input file B - not a file: $docB"
+	exit 1
+fi
+
 lenA=$(pdfLength "$docA")
 lenB=$(pdfLength "$docB")
 
@@ -25,8 +35,8 @@ fi
 readarray -t ins < <(echo -e "$in" | sort -nu)
 n=${#ins[*]}
 
-if (( n > lenB)); then
-	echo "Replacement numbers exceeded, greater than document length!"
+if ((n > lenB)); then
+	echo "Replacement page numbers greater than document B length!"
 	exit 1
 fi
 
@@ -34,8 +44,8 @@ start=1
 lastA=0
 lastB=0
 
-for ((i=0; i<$n; i++ )); do	
-	if (( ${ins[$i]} != lastB + 1 )); then 
+for ((i=0; i<$n; i++)); do	
+	if ((${ins[$i]} != lastB + 1)); then 
 		lastA=$((${ins[$i]} - 1))
 		out+=("A$start-$lastA")
 	fi
