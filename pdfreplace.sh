@@ -17,14 +17,9 @@ EOF
 
 while getopts 'h' option; do
 case "$option" in 
-	h)
+	h | *)
 		usage
-		exit 0
-		;;
-	*) 
-		usage
-		exit 0
-		;;
+		exit 0 ;;
 esac
 done
 
