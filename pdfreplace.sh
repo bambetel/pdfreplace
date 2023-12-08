@@ -7,6 +7,32 @@ pdfLength () {
 	pdftk "$1" dumpdata | awk '/^NumberOfPages:/ {print $2}'
 }
 
+usage () {
+cat << EOF
+usage: pdfreplace documentA documentB output n1 n2 ... nN
+    where n1..N are numbers of pages in documentA to be replaced with 
+    subsequent pages of document B.
+EOF
+}
+
+while getopts 'h' option; do
+case "$option" in 
+	h)
+		usage
+		exit 0
+		;;
+	*) 
+		usage
+		exit 0
+		;;
+esac
+done
+
+if (( ${#@} < 4 )); then
+	usage
+	exit 0
+fi
+
 docA=$1
 docB=$2
 resultDoc=$3
